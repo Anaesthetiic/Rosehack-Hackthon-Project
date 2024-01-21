@@ -1,3 +1,6 @@
+import random
+import Player
+
 def print_story():
         print("It's the year 2142, AI has taken over the world. All humans are now being hunted and killed.")
         print("This game is simple. You will start off in Riverside County and be given a choice whether to travel to a different county or stay.")
@@ -9,3 +12,14 @@ def print_story():
         print("You begin at University of California, Riverside in the Aberdeen-Inverness dorms.")
         print("Good luck, May your survival be long and your death be swift.")
         
+def generate_survival_chance(player):
+    # Calculate the mean based on the infamy value
+    mean = 90 - 10 * player.infamy  # Adjusted mean based on infamy
+    
+    # Generate a random number with a normal distribution
+    number = int(random.gauss(mean, 20))  # Standard Deviation=20
+    
+    # Ensure the number is within the desired range [0, 100]
+    number = max(0, min(100, number))
+    
+    return number
