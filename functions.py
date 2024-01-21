@@ -23,4 +23,3 @@ def generate_survival_chance(player):
     number = max(0, min(100, number))
     
     return number
-
