@@ -23,3 +23,11 @@ def generate_survival_chance(player):
     number = max(0, min(100, number))
     
     return number
+
+def generate_health_bonus(survivalChance):
+   # Ensure the parameter is within the desired range [0, 100]
+    survivalChance = max(0, min(100, survivalChance))
+
+    # Calculate the semi-random number based on the parameter
+    generated_number = int((100 - survivalChance) / 100 * 33)
+    return generated_number

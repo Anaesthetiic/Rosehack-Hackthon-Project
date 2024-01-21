@@ -36,7 +36,7 @@ def get_places_nearby(api_key, location, radius):
 
     return places
 
-def main():
+def print_one_place():
     # Replace with your actual API key
     api_key = 'AIzaSyBdEluVk5_sp43-7fz8iUOw4qdpIKzzytQ'
     location = '33.9806,-117.3755'  # Riverside, CA
@@ -44,12 +44,15 @@ def main():
 
     places = get_places_nearby(api_key, location, radius)
     
-    # Select 5 random places
-    places = random.sample(places, 5)
+    # Select a random places
+    places = random.sample(places, 1)
 
     # Print the place names
+    outputString = ""
     for place in places:
-        print(place)
+        outputString = outputString + str(place)
+    
+    return outputString
 
 if __name__ == "__main__":
     main()
