@@ -17,7 +17,13 @@ def get_places_nearby(api_key, location, radius):
         results = data.get("results", [])
 
         for result in results:
-            places.append(result["name"])
+            location = result["geometry"]["location"]
+            coordinates = (location["lat"], location["lng"])
+            places.append({
+            "name": result["name"],
+            "coordinates": coordinates,
+            "place_id": result["place_id"]
+        })
 
         # If there's a next page token, use it to get the next set of results
         next_page_token = data.get("next_page_token")
