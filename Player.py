@@ -5,7 +5,14 @@ class Player:
         self.name = name
         self.current_location = current_location
         self.health = 100
-
+        self.infamy = 1
+    
+    def display_stats(self):
+                print("\033[92m") # Set the text color to green
+                print(f"Player: {self.name}")
+                print(f"Health: {self.health}")
+                print(f"Infamy: {self.infamy}")
+                print("\033[0m") #reset the text
     def move(self, api_key):
         while True:
             # Get a list of nearby places
@@ -34,6 +41,5 @@ class Player:
 
     def find_enhancement(self, enhancement):
         self.survival_chance += enhancement
-        
         
         
