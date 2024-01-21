@@ -1,60 +1,55 @@
 import requests
+import time
+import random
 
-def get_county_from_city(api_key, city):
-    base_url = "https://maps.googleapis.com/maps/api/geocode/json"
-
-    # Construct the request parameters
-    params = {
-        "address": city,
-        "key": api_key,
-    }
-
-    # Make the API request
-    response = requests.get(base_url, params=params)
-    results = response.json().get("results", [])
-
-    # Extract the county name from the results
-    for result in results:
-        for component in result.get("address_components", []):
-            if "administrative_area_level_2" in component.get("types", []):
-                return component.get("long_name")
-
-    return None
-
-def get_counties_nearby(api_key, location, radius):
+def get_places_nearby(api_key, location, radius):
     base_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
-
-    # Construct the request parameters
     params = {
-        "location": location,  # Format: "latitude,longitude"
+        "location": location,
         "radius": radius,
-        "type": "locality",
         "key": api_key,
     }
 
-    # Make the API request
-    response = requests.get(base_url, params=params)
-    results = response.json().get("results", [])
+    places = []
+    while True:
+        response = requests.get(base_url, params=params)
+        data = response.json()
+        results = data.get("results", [])
 
-    # Get the county name for each city
-    for result in results:
-        city = result.get("name")
-        county = get_county_from_city(api_key, city)
-        result["county"] = county
+        for result in results:
+            location = result["geometry"]["location"]
+            coordinates = (location["lat"], location["lng"])
+            places.append({
+            "name": result["name"],
+            "coordinates": coordinates,
+            "place_id": result["place_id"]
+        })
 
-    return results
+        # If there's a next page token, use it to get the next set of results
+        next_page_token = data.get("next_page_token")
+        if next_page_token:
+            # Must wait before sending the request with the next page token
+            time.sleep(2)
+            params["pagetoken"] = next_page_token
+        else:
+            break
+
+    return places
 
 def main():
     # Replace with your actual API key
     api_key = 'AIzaSyBdEluVk5_sp43-7fz8iUOw4qdpIKzzytQ'
     location = '33.9806,-117.3755'  # Riverside, CA
-    radius = '40233.6'  # 25 miles in meters
+    radius = '32186.9'  # 20 miles in meters
 
-    results = get_counties_nearby(api_key, location, radius)
+    places = get_places_nearby(api_key, location, radius)
     
-    # Print only the county names
-    for result in results:
-        print(result.get('county'))
+    # Select 5 random places
+    places = random.sample(places, 5)
+
+    # Print the place names
+    for place in places:
+        print(place)
 
 if __name__ == "__main__":
     main()
