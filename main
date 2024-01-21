@@ -1,0 +1,5 @@
+from story import print_story
+
+print_story()
+
+
